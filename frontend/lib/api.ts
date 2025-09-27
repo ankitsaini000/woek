@@ -1,26 +1,38 @@
 // API configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://woek.onrender.com';
+
+// Helper function to ensure proper URL construction
+const buildUrl = (endpoint: string) => {
+  const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const finalUrl = `${baseUrl}${cleanEndpoint}`;
+  
+  // Debug logging
+  console.log(`API URL constructed: ${finalUrl}`);
+  
+  return finalUrl;
+};
 
 export const api = {
   packages: {
-    getAll: () => `${API_BASE_URL}/api/packages`,
-    getById: (id: string) => `${API_BASE_URL}/api/packages/${id}`,
+    getAll: () => buildUrl('/api/packages'),
+    getById: (id: string) => buildUrl(`/api/packages/${id}`),
   },
   destinations: {
-    getAll: () => `${API_BASE_URL}/api/destinations`,
-    getById: (id: string) => `${API_BASE_URL}/api/destinations/${id}`,
+    getAll: () => buildUrl('/api/destinations'),
+    getById: (id: string) => buildUrl(`/api/destinations/${id}`),
   },
   tours: {
-    getAll: () => `${API_BASE_URL}/api/tours`,
-    getById: (id: string) => `${API_BASE_URL}/api/tours/${id}`,
+    getAll: () => buildUrl('/api/tours'),
+    getById: (id: string) => buildUrl(`/api/tours/${id}`),
   },
   bookings: {
-    create: () => `${API_BASE_URL}/api/bookings`,
-    getByReference: (reference: string) => `${API_BASE_URL}/api/bookings/reference/${reference}`,
+    create: () => buildUrl('/api/bookings'),
+    getByReference: (reference: string) => buildUrl(`/api/bookings/reference/${reference}`),
   },
   destinationBookings: {
-    create: () => `${API_BASE_URL}/api/destination-bookings`,
-    getByReference: (reference: string) => `${API_BASE_URL}/api/destination-bookings/reference/${reference}`,
+    create: () => buildUrl('/api/destination-bookings'),
+    getByReference: (reference: string) => buildUrl(`/api/destination-bookings/reference/${reference}`),
   },
 };
 

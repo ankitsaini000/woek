@@ -73,6 +73,15 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 app.use('/api/destination-bookings', require('./routes/destinationBookingRoutes'));
 
+// Test route to verify server is working
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'API is working!',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // Home route
 app.get('/', (req, res) => {
   res.json({ 

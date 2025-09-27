@@ -5,9 +5,12 @@ const Package = require('../models/packageModel');
 // @access  Public
 const getPackages = async (req, res) => {
   try {
+    console.log('GET /api/packages called');
     const packages = await Package.find();
+    console.log(`Found ${packages.length} packages`);
     res.json(packages);
   } catch (error) {
+    console.error('Error fetching packages:', error);
     res.status(500).json({ message: error.message });
   }
 };

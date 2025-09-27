@@ -13,9 +13,12 @@ cloudinary.config({
 // @access  Public
 const getDestinations = async (req, res) => {
   try {
+    console.log('GET /api/destinations called');
     const destinations = await Destination.find();
+    console.log(`Found ${destinations.length} destinations`);
     res.json(destinations);
   } catch (error) {
+    console.error('Error fetching destinations:', error);
     res.status(500).json({ message: error.message });
   }
 };
