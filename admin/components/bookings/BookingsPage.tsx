@@ -93,10 +93,10 @@ export function BookingsPage() {
       setIsLoading(true);
       setError("");
       
-      console.log('Fetching bookings from:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/bookings/admin/all`);
+      console.log('Fetching bookings from:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/bookings/admin/all`);
       console.log('Auth token present:', !!authToken);
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/bookings/admin/all`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/bookings/admin/all`, {
         headers: {
           'Authorization': `Bearer ${authToken}`,
         },
@@ -128,10 +128,10 @@ export function BookingsPage() {
       setDestinationBookingsLoading(true);
       setDestinationBookingsError("");
       
-      console.log('Fetching destination bookings from:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/destination-bookings/admin/all`);
+      console.log('Fetching destination bookings from:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/destination-bookings/admin/all`);
       console.log('Auth token present:', !!authToken);
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/destination-bookings/admin/all`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/destination-bookings/admin/all`, {
         headers: {
           'Authorization': `Bearer ${authToken}`,
         },

@@ -56,7 +56,7 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
       setError("");
       
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/bookings/admin/${bookingId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/bookings/admin/${bookingId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

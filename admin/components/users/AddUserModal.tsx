@@ -72,7 +72,7 @@ export function AddUserModal({ isOpen, onClose, onSuccess }: AddUserModalProps) 
       console.log('Sending user data:', formData);
       console.log('Auth token:', token ? 'Present' : 'Missing');
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/users/admin`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/users/admin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

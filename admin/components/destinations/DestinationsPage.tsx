@@ -109,7 +109,7 @@ export function DestinationsPage() {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/destinations/${destination._id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/destinations/${destination._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

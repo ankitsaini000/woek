@@ -77,7 +77,7 @@ export function EditUserModal({ isOpen, onClose, onSuccess, user }: EditUserModa
     try {
       const token = localStorage.getItem('authToken');
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/users/${user._id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/users/${user._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

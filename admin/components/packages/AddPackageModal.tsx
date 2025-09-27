@@ -263,7 +263,7 @@ export function AddPackageModal({ isOpen, onClose, onSuccess }: AddPackageModalP
       console.log('Sending package data:', sanitizedData);
       console.log('Auth token:', token ? 'Present' : 'Missing');
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/packages`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/packages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

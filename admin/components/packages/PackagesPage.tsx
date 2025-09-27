@@ -97,7 +97,7 @@ export function PackagesPage() {
   const fetchPackages = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/packages`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/packages`);
       if (!response.ok) {
         throw new Error('Failed to fetch packages');
       }
@@ -129,7 +129,7 @@ export function PackagesPage() {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/packages/${pkg._id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/packages/${pkg._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

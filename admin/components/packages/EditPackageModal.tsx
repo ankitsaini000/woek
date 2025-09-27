@@ -322,7 +322,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
         termsAndConditions: Array.isArray(formData.termsAndConditions) ? formData.termsAndConditions : [],
       };
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/packages/${packageData._id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/packages/${packageData._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
