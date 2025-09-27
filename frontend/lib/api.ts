@@ -14,6 +14,12 @@ const buildUrl = (endpoint: string) => {
 };
 
 export const api = {
+  auth: {
+    signup: () => buildUrl('/api/auth/signup'),
+    signin: () => buildUrl('/api/auth/signin'),
+    logout: () => buildUrl('/api/auth/logout'),
+    profile: () => buildUrl('/api/auth/profile'),
+  },
   packages: {
     getAll: () => buildUrl('/api/packages'),
     getById: (id: string) => buildUrl(`/api/packages/${id}`),

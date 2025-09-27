@@ -23,7 +23,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   'https://woek.vercel.app', // Vercel frontend
-  'https://woek-admin.vercel.app' // Vercel admin (if you have one)
+  'https://admin-woek.vercel.app', // Vercel admin
+  'https://woek-admin.vercel.app' // Alternative admin URL
 ];
 
 app.use((req, res, next) => {
@@ -37,8 +38,12 @@ app.use((req, res, next) => {
   // Allow requests from allowed origins
   if (allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
-  } else if (process.env.NODE_ENV === 'production' && origin && origin.includes('vercel.app')) {
-    // Allow all Vercel deployments in production
+  } else if (process.env.NODE_ENV === 'production' && origin && (
+    origin.includes('vercel.app') || 
+    origin.includes('woek') ||
+    origin.includes('admin-woek')
+  )) {
+    // Allow all Vercel deployments and woek domains in production
     res.header('Access-Control-Allow-Origin', origin);
   }
   
