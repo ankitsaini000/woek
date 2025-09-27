@@ -21,21 +21,37 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:3000',
   process.env.ADMIN_URL || 'http://localhost:3001',
   'http://localhost:3000',
-  'http://localhost:3001'
+  'http://localhost:3001',
+  'https://woek.vercel.app', // Vercel frontend
+  'https://woek-admin.vercel.app' // Vercel admin (if you have one)
 ];
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
+  
+  // Debug logging
+  console.log('Request origin:', origin);
+  console.log('Request URL:', req.url);
+  console.log('Request method:', req.method);
+  
+  // Allow requests from allowed origins
   if (allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+  } else if (process.env.NODE_ENV === 'production' && origin && origin.includes('vercel.app')) {
+    // Allow all Vercel deployments in production
+    res.header('Access-Control-Allow-Origin', origin);
   }
+  
+  // Set CORS headers
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
   
+  // Handle preflight requests
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
+  
   next();
 });
 
@@ -59,7 +75,20 @@ app.use('/api/destination-bookings', require('./routes/destinationBookingRoutes'
 
 // Home route
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Tour & Travel API' });
+  res.json({ 
+    message: 'Welcome to Tour & Travel API',
+    status: 'Server is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // Error handler
