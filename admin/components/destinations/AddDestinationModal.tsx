@@ -38,18 +38,14 @@ interface DestinationData {
   highlights: string[];
   activities: string[];
   
-  // Additional Information
-  climate: string;
-  visaRequirements: string;
-  healthRequirements: string;
-  packingTips: string;
-  localTransportation: string;
-  accommodation: string;
-  dining: string;
-  shopping: string;
-  nightlife: string;
-  safety: string;
-  tips: string;
+  // Reviews
+  reviews: Array<{
+    id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
 }
 
 interface AddDestinationModalProps {
@@ -85,17 +81,7 @@ export function AddDestinationModal({ isOpen, onClose, onSuccess }: AddDestinati
     gallery: [],
     highlights: [],
     activities: [],
-    climate: "",
-    visaRequirements: "",
-    healthRequirements: "",
-    packingTips: "",
-    localTransportation: "",
-    accommodation: "",
-    dining: "",
-    shopping: "",
-    nightlife: "",
-    safety: "",
-    tips: ""
+    reviews: []
   });
 
   const tabs = [
@@ -105,7 +91,7 @@ export function AddDestinationModal({ isOpen, onClose, onSuccess }: AddDestinati
     { id: "pricing", label: "Pricing", icon: DollarSign },
     { id: "media", label: "Media", icon: Camera },
     { id: "highlights", label: "Highlights", icon: Star },
-    { id: "additional", label: "Additional", icon: Users }
+    { id: "additional", label: "Reviews", icon: Users }
   ];
 
   const handleInputChange = (field: keyof DestinationData, value: string | string[]) => {
@@ -162,9 +148,22 @@ export function AddDestinationModal({ isOpen, onClose, onSuccess }: AddDestinati
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API Error:', errorData);
-        throw new Error(errorData.message || 'Failed to create destination');
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          console.error('Failed to parse error response:', parseError);
+          errorData = { message: `HTTP ${response.status}: ${response.statusText}` };
+        }
+        
+        console.error('API Error Details:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData: errorData,
+          url: response.url
+        });
+        
+        throw new Error(errorData.message || `Failed to create destination (${response.status})`);
       }
 
       onSuccess();
@@ -192,20 +191,11 @@ export function AddDestinationModal({ isOpen, onClose, onSuccess }: AddDestinati
         gallery: [],
         highlights: [],
         activities: [],
-        climate: "",
-        visaRequirements: "",
-        healthRequirements: "",
-        packingTips: "",
-        localTransportation: "",
-        accommodation: "",
-        dining: "",
-        shopping: "",
-        nightlife: "",
-        safety: "",
-        tips: ""
+        reviews: []
       });
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Form submission error:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred while creating destination');
     } finally {
       setIsLoading(false);
     }
@@ -527,6 +517,7 @@ export function AddDestinationModal({ isOpen, onClose, onSuccess }: AddDestinati
                       <option value="GBP">GBP (£)</option>
                       <option value="JPY">JPY (¥)</option>
                       <option value="IDR">IDR (Rp)</option>
+                      <option value="INR">INR (₹)</option>
                     </select>
                   </div>
                 </div>
@@ -576,153 +567,136 @@ export function AddDestinationModal({ isOpen, onClose, onSuccess }: AddDestinati
               </div>
             )}
 
-            {/* Additional Information Tab */}
+            {/* Reviews Tab */}
             {activeTab === "additional" && (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Climate
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.climate}
-                      onChange={(e) => handleInputChange('climate', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      placeholder="e.g., Tropical"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Visa Requirements
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.visaRequirements}
-                      onChange={(e) => handleInputChange('visaRequirements', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      placeholder="e.g., Visa on arrival for most countries"
-                    />
-                  </div>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium text-gray-900">Customer Reviews</h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newReview = {
+                        id: Date.now().toString(),
+                        name: "",
+                        rating: 5,
+                        comment: "",
+                        date: new Date().toISOString().split('T')[0]
+                      };
+                      setFormData(prev => ({
+                        ...prev,
+                        reviews: [...prev.reviews, newReview]
+                      }));
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    Add Review
+                  </button>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Health Requirements
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.healthRequirements}
-                    onChange={(e) => handleInputChange('healthRequirements', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                    placeholder="e.g., Yellow fever vaccination recommended"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Packing Tips
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={formData.packingTips}
-                    onChange={(e) => handleInputChange('packingTips', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                    placeholder="Essential items to pack for this destination"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Local Transportation
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.localTransportation}
-                      onChange={(e) => handleInputChange('localTransportation', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      placeholder="e.g., Taxi, Bus, Scooter rental"
-                    />
+                {formData.reviews.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <p>No reviews added yet. Click &quot;Add Review&quot; to add customer reviews.</p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Accommodation
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.accommodation}
-                      onChange={(e) => handleInputChange('accommodation', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      placeholder="e.g., Hotels, Villas, Hostels"
-                    />
+                ) : (
+                  <div className="space-y-4">
+                    {formData.reviews.map((review, index) => (
+                      <div key={review.id} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex justify-between items-start mb-3">
+                          <h4 className="font-medium text-gray-900">Review #{index + 1}</h4>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData(prev => ({
+                                ...prev,
+                                reviews: prev.reviews.filter(r => r.id !== review.id)
+                              }));
+                            }}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Customer Name
+                            </label>
+                            <input
+                              type="text"
+                              value={review.name}
+                              onChange={(e) => {
+                                const updatedReviews = formData.reviews.map(r => 
+                                  r.id === review.id ? { ...r, name: e.target.value } : r
+                                );
+                                setFormData(prev => ({ ...prev, reviews: updatedReviews }));
+                              }}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                              placeholder="Customer name"
+                            />
+                          </div>
+                          
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Rating
+                            </label>
+                            <select
+                              value={review.rating}
+                              onChange={(e) => {
+                                const updatedReviews = formData.reviews.map(r => 
+                                  r.id === review.id ? { ...r, rating: parseInt(e.target.value) } : r
+                                );
+                                setFormData(prev => ({ ...prev, reviews: updatedReviews }));
+                              }}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                            >
+                              <option value={1}>1 Star</option>
+                              <option value={2}>2 Stars</option>
+                              <option value={3}>3 Stars</option>
+                              <option value={4}>4 Stars</option>
+                              <option value={5}>5 Stars</option>
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-3">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Review Comment
+                          </label>
+                          <textarea
+                            rows={3}
+                            value={review.comment}
+                            onChange={(e) => {
+                              const updatedReviews = formData.reviews.map(r => 
+                                r.id === review.id ? { ...r, comment: e.target.value } : r
+                              );
+                              setFormData(prev => ({ ...prev, reviews: updatedReviews }));
+                            }}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                            placeholder="Customer review comment..."
+                          />
+                        </div>
+                        
+                        <div className="mt-3">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Review Date
+                          </label>
+                          <input
+                            type="date"
+                            value={review.date}
+                            onChange={(e) => {
+                              const updatedReviews = formData.reviews.map(r => 
+                                r.id === review.id ? { ...r, date: e.target.value } : r
+                              );
+                              setFormData(prev => ({ ...prev, reviews: updatedReviews }));
+                            }}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Dining
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.dining}
-                      onChange={(e) => handleInputChange('dining', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      placeholder="e.g., Local cuisine, International"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Shopping
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.shopping}
-                      onChange={(e) => handleInputChange('shopping', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      placeholder="e.g., Art markets, Souvenirs"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nightlife
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.nightlife}
-                      onChange={(e) => handleInputChange('nightlife', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                      placeholder="e.g., Beach clubs, Bars"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Safety Information
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={formData.safety}
-                    onChange={(e) => handleInputChange('safety', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                    placeholder="Important safety information for travelers"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Additional Tips
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={formData.tips}
-                    onChange={(e) => handleInputChange('tips', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                    placeholder="Any additional tips or information for travelers"
-                  />
-                </div>
+                )}
               </div>
             )}
 

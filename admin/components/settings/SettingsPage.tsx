@@ -272,6 +272,7 @@ export function SettingsPage() {
                       <option value="EUR">EUR</option>
                       <option value="GBP">GBP</option>
                       <option value="JPY">JPY</option>
+                      <option value="INR">INR</option>
                     </select>
                   </div>
                 </div>

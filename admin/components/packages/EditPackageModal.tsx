@@ -216,10 +216,31 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
     }
   }, [packageData]);
 
-  const handleInputChange = (field: keyof typeof formData, value: string | number | boolean) => {
+  const handleInputChange = (field: keyof typeof formData, value: string | number | boolean | string[]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handlePackageDetailsChange = (field: keyof typeof formData.packageDetails, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      packageDetails: {
+        ...prev.packageDetails,
+        [field]: value
+      }
+    }));
+  };
+
+  const handleDetailedTermsChange = (field: keyof typeof formData.detailedTermsAndConditions, value: string) => {
+    const items = value.split(',').map(item => item.trim()).filter(item => item);
+    setFormData(prev => ({
+      ...prev,
+      detailedTermsAndConditions: {
+        ...prev.detailedTermsAndConditions,
+        [field]: items
+      }
     }));
   };
 
@@ -737,10 +758,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={3}
                       value={formData.packageDetails.dateChangePolicy}
-                      onChange={(e) => handleInputChange('packageDetails', {
-                        ...formData.packageDetails,
-                        dateChangePolicy: e.target.value
-                      })}
+                      onChange={(e) => handlePackageDetailsChange('dateChangePolicy', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Policy for changing travel dates..."
                     />
@@ -753,10 +771,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={3}
                       value={formData.packageDetails.cancellationPolicy}
-                      onChange={(e) => handleInputChange('packageDetails', {
-                        ...formData.packageDetails,
-                        cancellationPolicy: e.target.value
-                      })}
+                      onChange={(e) => handlePackageDetailsChange('cancellationPolicy', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Policy for package cancellation..."
                     />
@@ -769,10 +784,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={3}
                       value={formData.packageDetails.refundPolicy}
-                      onChange={(e) => handleInputChange('packageDetails', {
-                        ...formData.packageDetails,
-                        refundPolicy: e.target.value
-                      })}
+                      onChange={(e) => handlePackageDetailsChange('refundPolicy', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Refund terms and conditions..."
                     />
@@ -785,10 +797,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={3}
                       value={formData.packageDetails.bookingPolicy}
-                      onChange={(e) => handleInputChange('packageDetails', {
-                        ...formData.packageDetails,
-                        bookingPolicy: e.target.value
-                      })}
+                      onChange={(e) => handlePackageDetailsChange('bookingPolicy', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Booking terms and conditions..."
                     />
@@ -854,10 +863,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={6}
                       value={formData.packageDetails.cancellationPolicy}
-                      onChange={(e) => handleInputChange('packageDetails', {
-                        ...formData.packageDetails,
-                        cancellationPolicy: e.target.value
-                      })}
+                      onChange={(e) => handlePackageDetailsChange('cancellationPolicy', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Enter detailed cancellation policy including timeframes, fees, and conditions..."
                     />
@@ -879,10 +885,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={4}
                       value={formData.detailedTermsAndConditions.general.join(', ')}
-                      onChange={(e) => handleInputChange('detailedTermsAndConditions', {
-                        ...formData.detailedTermsAndConditions,
-                        general: e.target.value.split(',').map(item => item.trim()).filter(item => item)
-                      })}
+                      onChange={(e) => handleDetailedTermsChange('general', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Package prices are subject to availability and change without prior notice, Passport must be valid for at least 6 months from the date of return"
                     />
@@ -896,10 +899,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={4}
                       value={formData.detailedTermsAndConditions.booking.join(', ')}
-                      onChange={(e) => handleInputChange('detailedTermsAndConditions', {
-                        ...formData.detailedTermsAndConditions,
-                        booking: e.target.value.split(',').map(item => item.trim()).filter(item => item)
-                      })}
+                      onChange={(e) => handleDetailedTermsChange('booking', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Booking confirmation required, Payment terms, Booking modifications"
                     />
@@ -913,10 +913,7 @@ export function EditPackageModal({ isOpen, onClose, onSuccess, package: packageD
                     <textarea
                       rows={4}
                       value={formData.detailedTermsAndConditions.travel.join(', ')}
-                      onChange={(e) => handleInputChange('detailedTermsAndConditions', {
-                        ...formData.detailedTermsAndConditions,
-                        travel: e.target.value.split(',').map(item => item.trim()).filter(item => item)
-                      })}
+                      onChange={(e) => handleDetailedTermsChange('travel', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Travel insurance requirements, Health requirements, Visa requirements"
                     />

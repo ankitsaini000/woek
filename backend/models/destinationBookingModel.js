@@ -4,7 +4,8 @@ const destinationBookingSchema = mongoose.Schema(
   {
     // Destination Information
     destinationId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Destination',
       required: [true, 'Destination ID is required']
     },
 

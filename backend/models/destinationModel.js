@@ -24,9 +24,9 @@ const activitySchema = mongoose.Schema({
 });
 
 const reviewSchema = mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+  id: {
+    type: String,
+    required: true
   },
   name: {
     type: String,
@@ -43,8 +43,8 @@ const reviewSchema = mongoose.Schema({
     required: true
   },
   date: {
-    type: Date,
-    default: Date.now
+    type: String,
+    required: true
   }
 });
 
@@ -141,53 +141,7 @@ const destinationSchema = mongoose.Schema(
     highlights: [String],
     activities: [String],
     
-    // Additional Information
-    climate: {
-      type: String,
-      trim: true
-    },
-    visaRequirements: {
-      type: String,
-      trim: true
-    },
-    healthRequirements: {
-      type: String,
-      trim: true
-    },
-    packingTips: {
-      type: String,
-      trim: true
-    },
-    localTransportation: {
-      type: String,
-      trim: true
-    },
-    accommodation: {
-      type: String,
-      trim: true
-    },
-    dining: {
-      type: String,
-      trim: true
-    },
-    shopping: {
-      type: String,
-      trim: true
-    },
-    nightlife: {
-      type: String,
-      trim: true
-    },
-    safety: {
-      type: String,
-      trim: true
-    },
-    tips: {
-      type: String,
-      trim: true
-    },
-    
-    // Legacy fields for backward compatibility
+    // Reviews
     reviews: [reviewSchema],
     featured: {
       type: Boolean,

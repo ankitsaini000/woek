@@ -1,4 +1,5 @@
 const DestinationBooking = require('../models/destinationBookingModel');
+const Destination = require('../models/destinationModel');
 
 // @desc    Create a new destination booking
 // @route   POST /api/destination-bookings
@@ -131,7 +132,9 @@ const createDestinationBooking = async (req, res) => {
 // @access  Private/Admin
 const getDestinationBookings = async (req, res) => {
   try {
-    const bookings = await DestinationBooking.find({}).sort({ createdAt: -1 });
+    const bookings = await DestinationBooking.find({})
+      .populate('destinationId', 'name title country region description mainImage startingPrice currency bestTimeToVisit duration difficulty')
+      .sort({ createdAt: -1 });
     res.json(bookings);
   } catch (error) {
     console.error('Error fetching destination bookings:', error);
@@ -144,7 +147,8 @@ const getDestinationBookings = async (req, res) => {
 // @access  Private/Admin
 const getDestinationBookingById = async (req, res) => {
   try {
-    const booking = await DestinationBooking.findById(req.params.id);
+    const booking = await DestinationBooking.findById(req.params.id)
+      .populate('destinationId', 'name title country region description mainImage startingPrice currency bestTimeToVisit duration difficulty highlights activities');
     if (!booking) {
       return res.status(404).json({ message: 'Destination booking not found' });
     }

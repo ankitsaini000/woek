@@ -80,18 +80,8 @@ const createDestination = async (req, res) => {
       highlights,
       activities,
       
-      // Additional Information
-      climate,
-      visaRequirements,
-      healthRequirements,
-      packingTips,
-      localTransportation,
-      accommodation,
-      dining,
-      shopping,
-      nightlife,
-      safety,
-      tips,
+      // Reviews
+      reviews,
       
       // Legacy fields
       featured
@@ -139,18 +129,14 @@ const createDestination = async (req, res) => {
       highlights: Array.isArray(highlights) ? highlights : [],
       activities: Array.isArray(activities) ? activities : [],
       
-      // Additional Information
-      climate,
-      visaRequirements,
-      healthRequirements,
-      packingTips,
-      localTransportation,
-      accommodation,
-      dining,
-      shopping,
-      nightlife,
-      safety,
-      tips,
+      // Reviews
+      reviews: Array.isArray(reviews) ? reviews.map(review => ({
+        id: review.id || Date.now().toString(),
+        name: review.name || '',
+        rating: parseInt(review.rating) || 5,
+        comment: review.comment || '',
+        date: review.date || new Date().toISOString().split('T')[0]
+      })) : [],
       
       // Legacy fields for backward compatibility
       featured: featured || false,
@@ -202,9 +188,21 @@ const updateDestination = async (req, res) => {
     const destination = await Destination.findById(req.params.id);
     
     if (destination) {
+      // Process reviews data if present
+      const updateData = { ...req.body };
+      if (updateData.reviews && Array.isArray(updateData.reviews)) {
+        updateData.reviews = updateData.reviews.map(review => ({
+          id: review.id || Date.now().toString(),
+          name: review.name || '',
+          rating: parseInt(review.rating) || 5,
+          comment: review.comment || '',
+          date: review.date || new Date().toISOString().split('T')[0]
+        }));
+      }
+      
       const updatedDestination = await Destination.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        updateData,
         { new: true, runValidators: true }
       );
       res.json(updatedDestination);
@@ -212,6 +210,7 @@ const updateDestination = async (req, res) => {
       res.status(404).json({ message: 'Destination not found' });
     }
   } catch (error) {
+    console.error('Update destination error:', error);
     res.status(400).json({ message: error.message });
   }
 };

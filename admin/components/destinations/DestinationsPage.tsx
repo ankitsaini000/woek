@@ -31,17 +31,13 @@ interface Destination {
   gallery: string[];
   highlights: string[];
   activities: string[];
-  climate: string;
-  visaRequirements: string;
-  healthRequirements: string;
-  packingTips: string;
-  localTransportation: string;
-  accommodation: string;
-  dining: string;
-  shopping: string;
-  nightlife: string;
-  safety: string;
-  tips: string;
+  reviews: Array<{
+    id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
   featured: boolean;
   createdAt: string;
 }
@@ -76,7 +72,15 @@ export function DestinationsPage() {
       }
 
       const data = await response.json();
-      setDestinations(data);
+      console.log('Fetched destinations data:', data);
+      
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setDestinations(data);
+      } else {
+        console.error('Expected array but got:', typeof data, data);
+        setDestinations([]);
+      }
       setError(""); // Clear any previous errors
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -125,9 +129,9 @@ export function DestinationsPage() {
     }
   };
 
-  const filteredDestinations = destinations.filter(destination =>
-    destination.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    destination.country.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDestinations = (destinations || []).filter(destination =>
+    destination?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    destination?.country?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (

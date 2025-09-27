@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../../../lib/api";
 
 interface DestinationBookingModalProps {
@@ -9,7 +9,15 @@ interface DestinationBookingModalProps {
   destinationId: string;
 }
 
+interface Destination {
+  _id: string;
+  name: string;
+  startingPrice: number;
+  currency: string;
+}
+
 export default function DestinationBookingModal({ isOpen, onClose, destinationId }: DestinationBookingModalProps) {
+  const [destination, setDestination] = useState<Destination | null>(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -31,6 +39,25 @@ export default function DestinationBookingModal({ isOpen, onClose, destinationId
   const [submitMessage, setSubmitMessage] = useState('');
   const [bookingReference, setBookingReference] = useState('');
 
+  // Fetch destination data when modal opens
+  useEffect(() => {
+    if (isOpen && destinationId) {
+      const fetchDestination = async () => {
+        try {
+          const response = await fetch(api.destinations.getById(destinationId));
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Fetched destination for booking:', data);
+            setDestination(data);
+          }
+        } catch (error) {
+          console.error('Error fetching destination:', error);
+        }
+      };
+      fetchDestination();
+    }
+  }, [isOpen, destinationId]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -45,10 +72,13 @@ export default function DestinationBookingModal({ isOpen, onClose, destinationId
     setSubmitMessage('');
 
     try {
+      const pricePerPerson = destination?.startingPrice || 999;
+      const totalAmount = pricePerPerson * formData.numberOfTravelers;
+      
       const bookingData = {
         destinationId,
         ...formData,
-        totalAmount: 999 * formData.numberOfTravelers // Default price for destinations
+        totalAmount: totalAmount
       };
 
       console.log('Sending destination booking data:', bookingData);
@@ -102,7 +132,9 @@ export default function DestinationBookingModal({ isOpen, onClose, destinationId
         <div className="p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-black">Book Destination</h2>
+            <h2 className="text-2xl font-bold text-black">
+              Book {destination?.name || 'Destination'}
+            </h2>
             <button
               onClick={onClose}
               className="text-black hover:text-gray-700 text-2xl"
@@ -125,11 +157,15 @@ export default function DestinationBookingModal({ isOpen, onClose, destinationId
               </div>
               <div>
                 <span className="text-black">Price per person:</span>
-                <span className="text-black ml-2">USD 999</span>
+                <span className="text-black ml-2">
+                  {destination?.currency || 'USD'} {destination?.startingPrice?.toLocaleString() || '999'}
+                </span>
               </div>
               <div>
                 <span className="text-black">Total Amount:</span>
-                <span className="text-black ml-2 font-semibold">USD {(999 * formData.numberOfTravelers).toLocaleString()}</span>
+                <span className="text-black ml-2 font-semibold">
+                  {destination?.currency || 'USD'} {((destination?.startingPrice || 999) * formData.numberOfTravelers).toLocaleString()}
+                </span>
               </div>
             </div>
           </div>

@@ -3,16 +3,24 @@
 import { useState, useEffect, useCallback } from "react";
 import { X, User, Calendar, MapPin, DollarSign, Phone, Mail, Users, AlertTriangle, FileText } from "lucide-react";
 
-interface BookingDetails {
+interface DestinationBookingDetails {
   _id: string;
   bookingReference: string;
-  packageId: {
+  destinationId: {
     _id: string;
+    name: string;
     title: string;
-    currentPrice: number;
+    country: string;
+    region?: string;
+    description: string;
+    mainImage: string;
+    startingPrice: number;
     currency: string;
-    duration: string;
-    location: string;
+    bestTimeToVisit?: string;
+    duration?: string;
+    difficulty?: string;
+    highlights?: string[];
+    activities?: string[];
   };
   firstName: string;
   lastName: string;
@@ -32,21 +40,18 @@ interface BookingDetails {
   dietaryRequirements?: string;
   medicalConditions?: string;
   adminNotes?: string;
-  bookingDate: string;
-  confirmationDate?: string;
-  cancellationDate?: string;
   createdAt: string;
   updatedAt: string;
 }
 
-interface BookingDetailsModalProps {
+interface DestinationBookingDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   bookingId: string;
 }
 
-export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetailsModalProps) {
-  const [booking, setBooking] = useState<BookingDetails | null>(null);
+export function DestinationBookingDetailsModal({ isOpen, onClose, bookingId }: DestinationBookingDetailsModalProps) {
+  const [booking, setBooking] = useState<DestinationBookingDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -56,21 +61,21 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
       setError("");
       
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/bookings/admin/${bookingId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/destination-bookings/admin/${bookingId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch booking details');
+        throw new Error('Failed to fetch destination booking details');
       }
 
       const data = await response.json();
       setBooking(data);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An error occurred');
-      console.error('Error fetching booking details:', err);
+      console.error('Error fetching destination booking details:', err);
     } finally {
       setIsLoading(false);
     }
@@ -90,10 +95,10 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
     });
   };
 
-  const formatCurrency = (amount: number, currency: string) => {
+  const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency || 'USD',
+      currency: 'USD',
     }).format(amount);
   };
 
@@ -137,7 +142,7 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
         <div className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Booking Details</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Destination Booking Details</h2>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600"
@@ -151,7 +156,7 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <span className="ml-2 text-gray-600">Loading booking details...</span>
+                <span className="ml-2 text-gray-600">Loading destination booking details...</span>
               </div>
             ) : error ? (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
@@ -247,31 +252,65 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
                   </div>
                 </div>
 
-                {/* Package Information */}
+                {/* Destination Information */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium text-gray-900 flex items-center">
                     <MapPin className="h-5 w-5 mr-2" />
-                    Package Information
+                    Destination Information
                   </h3>
                   <div className="bg-blue-50 rounded-lg p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Package Title</label>
-                        <p className="text-sm font-medium text-gray-900">{booking.packageId?.title || 'N/A'}</p>
+                        <label className="block text-sm font-medium text-gray-700">Destination Name</label>
+                        <p className="text-sm font-medium text-gray-900">{booking.destinationId?.name || 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Location</label>
-                        <p className="text-sm text-gray-900">{booking.packageId?.location || 'N/A'}</p>
+                        <label className="block text-sm font-medium text-gray-700">Country</label>
+                        <p className="text-sm text-gray-900">{booking.destinationId?.country || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Region</label>
+                        <p className="text-sm text-gray-900">{booking.destinationId?.region || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Best Time to Visit</label>
+                        <p className="text-sm text-gray-900">{booking.destinationId?.bestTimeToVisit || 'N/A'}</p>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Duration</label>
-                        <p className="text-sm text-gray-900">{booking.packageId?.duration || 'N/A'}</p>
+                        <p className="text-sm text-gray-900">{booking.destinationId?.duration || 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Package Price</label>
-                        <p className="text-sm text-gray-900">{formatCurrency(booking.packageId?.currentPrice || 0, booking.packageId?.currency || 'USD')}</p>
+                        <label className="block text-sm font-medium text-gray-700">Difficulty</label>
+                        <p className="text-sm text-gray-900">{booking.destinationId?.difficulty || 'N/A'}</p>
                       </div>
                     </div>
+                    {booking.destinationId?.description && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700">Description</label>
+                        <p className="text-sm text-gray-900 mt-1">{booking.destinationId.description}</p>
+                      </div>
+                    )}
+                    {booking.destinationId?.highlights && booking.destinationId.highlights.length > 0 && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700">Highlights</label>
+                        <ul className="text-sm text-gray-900 mt-1 list-disc list-inside">
+                          {booking.destinationId.highlights.map((highlight, index) => (
+                            <li key={index}>{highlight}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {booking.destinationId?.activities && booking.destinationId.activities.length > 0 && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700">Activities</label>
+                        <ul className="text-sm text-gray-900 mt-1 list-disc list-inside">
+                          {booking.destinationId.activities.map((activity, index) => (
+                            <li key={index}>{activity}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -285,7 +324,7 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
                     <div className="flex justify-between items-center">
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Total Amount</label>
-                        <p className="text-2xl font-bold text-green-600">{formatCurrency(booking.totalAmount, booking.packageId?.currency || 'USD')}</p>
+                        <p className="text-2xl font-bold text-green-600">{formatCurrency(booking.totalAmount)}</p>
                       </div>
                       <div className="text-right">
                         <label className="block text-sm font-medium text-gray-700">Payment Status</label>

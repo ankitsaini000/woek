@@ -22,7 +22,7 @@ interface Destination {
   bestTimeToVisit: string;
   averageRating: number;
   totalReviews: number;
-  averagePrice: number;
+  startingPrice: number;
   currency: string;
   duration: string;
   featured: boolean;
@@ -33,6 +33,13 @@ interface Destination {
   timezone?: string;
   latitude?: string;
   longitude?: string;
+  reviews: Array<{
+    id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+  }>;
   createdAt: string;
   updatedAt: string;
 }
@@ -45,7 +52,9 @@ const fetchDestinationData = async (id: string): Promise<Destination> => {
     throw new Error('Failed to fetch destination');
   }
   
-  return await response.json();
+  const data = await response.json();
+  console.log('Fetched destination data:', data);
+  return data;
 };
 
 export default function DestinationDetail() {
@@ -94,7 +103,7 @@ export default function DestinationDetail() {
       <div className="min-h-screen flex flex-col items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h1 className="text-2xl font-bold mb-4">Error Loading Destination</h1>
+          <h1 className="text-2xl font-bold mb-4 text-black">Error Loading Destination</h1>
           <p className="text-gray-600 mb-6">{error}</p>
           <button 
             onClick={() => window.location.reload()}
@@ -118,7 +127,7 @@ export default function DestinationDetail() {
       <div className="min-h-screen flex flex-col items-center justify-center">
         <div className="text-center">
           <div className="text-gray-400 text-6xl mb-4">🌍</div>
-          <h1 className="text-2xl font-bold mb-4">Destination not found</h1>
+          <h1 className="text-2xl font-bold mb-4 text-black">Destination not found</h1>
           <p className="text-gray-600 mb-6">The destination you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <button 
             onClick={() => router.push('/destinations')}
@@ -176,7 +185,9 @@ export default function DestinationDetail() {
             <div className="mt-6 md:mt-0">
               <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 text-black shadow-lg">
                 <p className="text-sm uppercase tracking-wider mb-1 text-black">Starting from</p>
-                <p className="text-3xl font-bold text-black mb-4">{destination.currency} {destination.averagePrice?.toLocaleString() || '999'}</p>
+                <p className="text-3xl font-bold text-black mb-4">
+                  {destination.currency || 'USD'} {destination.startingPrice?.toLocaleString() || '999'}
+                </p>
                 <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg">
                   Book This Trip
                 </button>
@@ -291,7 +302,7 @@ export default function DestinationDetail() {
               
               {/* Highlights Section */}
               <div>
-                <h2 className="text-2xl font-bold mb-6">Highlights</h2>
+                <h2 className="text-2xl font-bold mb-6 text-black">Highlights</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {destination.highlights.map((highlight, index) => (
                     <div key={index} className="flex items-center p-4 bg-white border border-gray-100 rounded-lg shadow-sm">
@@ -310,21 +321,21 @@ export default function DestinationDetail() {
             {/* Right Column - Booking Widget */}
             <div>
               <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-6 sticky top-24">
-                <h3 className="text-xl font-bold mb-4">Ready to Experience {destination.name.split(',')[0]}?</h3>
+                <h3 className="text-xl font-bold mb-4 text-black">Ready to Experience {destination.name.split(',')[0]}?</h3>
                 <p className="text-gray-600 mb-6">Book your dream vacation today and get exclusive deals!</p>
                 
                 <div className="space-y-4 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Travel Dates</label>
+                    <label className="block text-sm font-medium text-gray-800 mb-1">Travel Dates</label>
                     <div className="flex space-x-2">
-                      <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                      <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      <input type="date" className="w-full px-3 py-2 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      <input type="date" className="w-full px-3 py-2 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                     </div>
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Travelers</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label className="block text-sm font-medium text-gray-800 mb-1">Travelers</label>
+                    <select className="w-full px-3 py-2 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                       <option>1 Adult</option>
                       <option>2 Adults</option>
                       <option>2 Adults, 1 Child</option>
@@ -342,21 +353,15 @@ export default function DestinationDetail() {
                 </button>
                 
                 <div className="text-center">
-                  <p className="text-sm text-gray-500">Secure booking with instant confirmation</p>
+                  <p className="text-sm text-gray-600">Secure booking with instant confirmation</p>
                 </div>
                 
                 <div className="mt-6 pt-6 border-t border-gray-100">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-600">Base price</span>
-                    <span className="font-medium">{destination.currency} {destination.averagePrice?.toLocaleString() || '999'}</span>
-                  </div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-600">Taxes & fees</span>
-                    <span className="font-medium">$199</span>
-                  </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <span className="font-bold">Total</span>
-                    <span className="font-bold text-xl">$1,498</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-800">Price</span>
+                    <span className="font-bold text-xl text-black">
+                      {destination.currency || 'USD'} {destination.startingPrice?.toLocaleString() || '999'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -378,7 +383,7 @@ export default function DestinationDetail() {
                           <svg className="w-4 h-4 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                           </svg>
-                          <span className="text-sm font-medium">{destination.averageRating?.toFixed(1) || '4.8'}</span>
+                          <span className="text-sm font-medium text-black">{destination.averageRating?.toFixed(1) || '4.8'}</span>
                         </div>
                       </div>
                       <p className="text-gray-600 mb-4">Experience this amazing activity in {destination.name}</p>
@@ -389,7 +394,9 @@ export default function DestinationDetail() {
                           </svg>
                           <span>{destination.duration}</span>
                         </div>
-                        <span className="font-bold text-indigo-600">{destination.currency} {destination.averagePrice?.toLocaleString() || '999'}</span>
+                        <span className="font-bold text-indigo-600">
+                          {destination.currency || 'USD'} {destination.startingPrice?.toLocaleString() || '999'}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -435,70 +442,46 @@ export default function DestinationDetail() {
         {activeTab === 'reviews' && (
           <div>
             <h2 className="text-2xl font-bold text-black mb-8">Traveler Reviews</h2>
-            <div className="space-y-6">
-              {/* Placeholder for reviews */}
-              <div className="bg-gray-50 p-6 rounded-xl">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                  <div>
-                    <h3 className="font-medium">Sarah Johnson</h3>
-                    <div className="flex items-center">
-                      <div className="flex text-yellow-400">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
+            {destination.reviews && destination.reviews.length > 0 ? (
+              <div className="space-y-6">
+                {destination.reviews.map((review, index) => (
+                  <div key={review.id || index} className="bg-gray-50 p-6 rounded-xl">
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-gray-300 rounded-full mr-4 flex items-center justify-center">
+                        <span className="text-gray-600 font-medium text-lg">
+                          {review.name.charAt(0).toUpperCase()}
+                        </span>
                       </div>
-                      <span className="text-sm text-gray-500 ml-2">Visited April 2023</span>
-                    </div>
-                  </div>
-                </div>
-                <h4 className="font-medium mb-2">Absolutely magical experience!</h4>
-                <p className="text-gray-600">Bali exceeded all my expectations. The beaches were pristine, the temples were breathtaking, and the local cuisine was delicious. I particularly enjoyed the Mount Batur sunrise trek - it was challenging but so worth it for the views!</p>
-              </div>
-              
-              <div className="bg-gray-50 p-6 rounded-xl">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                  <div>
-                    <h3 className="font-medium">Michael Chen</h3>
-                    <div className="flex items-center">
-                      <div className="flex text-yellow-400">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                        </svg>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}></path>
-                        </svg>
+                      <div>
+                        <h3 className="font-medium text-black">{review.name}</h3>
+                        <div className="flex items-center">
+                          <div className="flex text-yellow-400">
+                            {[...Array(5)].map((_, i) => (
+                              <svg 
+                                key={i} 
+                                className={`w-4 h-4 ${i < review.rating ? 'fill-current' : 'fill-none stroke-current'}`} 
+                                viewBox="0 0 20 20" 
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                              </svg>
+                            ))}
+                          </div>
+                          <span className="text-sm text-gray-500 ml-2">Visited {review.date}</span>
+                        </div>
                       </div>
-                      <span className="text-sm text-gray-500 ml-2">Visited June 2023</span>
                     </div>
+                    <p className="text-gray-600">{review.comment}</p>
                   </div>
-                </div>
-                <h4 className="font-medium mb-2">Cultural immersion at its best</h4>
-                <p className="text-gray-600">The cultural aspects of Bali were the highlight for me. The Ubud area with its art markets, traditional dances, and temples provided an authentic experience. The rice terraces were stunning, and the local people were incredibly welcoming.</p>
+                ))}
               </div>
-            </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="text-gray-400 text-6xl mb-4">⭐</div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Reviews Yet</h3>
+                <p className="text-gray-600">Be the first to share your experience at this destination!</p>
+              </div>
+            )}
           </div>
         )}
       </div>

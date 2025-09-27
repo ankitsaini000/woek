@@ -37,6 +37,44 @@ interface Package {
     location: string;
   }>;
   termsAndConditions: string[];
+  packageDetails: {
+    dateChangePolicy: string;
+    cancellationPolicy: string;
+    refundPolicy: string;
+    bookingPolicy: string;
+  };
+  detailedActivities: Array<{
+    name: string;
+    description: string;
+    duration: string;
+    included: boolean;
+  }>;
+  detailedHighlights: Array<{
+    title: string;
+    description: string;
+    icon: string;
+  }>;
+  detailedItinerary: Array<{
+    day: number;
+    title: string;
+    description: string;
+    activities: string[];
+    meals: string[];
+    accommodation: string;
+    transportation: string;
+    highlights: string[];
+    tips: string;
+  }>;
+  detailedTermsAndConditions: {
+    general: string[];
+    booking: string[];
+    cancellation: string[];
+    refund: string[];
+    travel: string[];
+    health: string[];
+    insurance: string[];
+    liability: string[];
+  };
   featured: boolean;
   active: boolean;
   createdAt: string;
@@ -50,6 +88,7 @@ export function PackagesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchPackages();
@@ -112,9 +151,9 @@ export function PackagesPage() {
   if (isLoading) {
     return (
       <div className="flex h-screen">
-        <Sidebar />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="flex-1 flex flex-col">
-          <Header />
+          <Header onMenuClick={() => setSidebarOpen(true)} />
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -128,9 +167,9 @@ export function PackagesPage() {
 
   return (
     <div className="flex h-screen">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col">
-        <Header />
+        <Header onMenuClick={() => setSidebarOpen(true)} />
         
         <div className="flex-1 p-6 bg-gray-50">
           <div className="max-w-7xl mx-auto">

@@ -21,7 +21,7 @@ interface Destination {
   bestTimeToVisit: string;
   averageRating: number;
   totalReviews: number;
-  averagePrice: number;
+  startingPrice: number;
   currency: string;
   duration: string;
   featured: boolean;
@@ -48,6 +48,7 @@ export default function Destinations() {
         }
         
         const data = await response.json();
+        console.log('Fetched destinations data:', data);
         setDestinations(data);
       } catch (err) {
         console.error('Error fetching destinations:', err);
@@ -119,7 +120,7 @@ export default function Destinations() {
             <div>
               <span className="text-xs text-gray-500 uppercase tracking-wider">From</span>
               <p className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                {destination.currency} {destination.averagePrice?.toLocaleString() || '999'}
+                {destination.currency || 'USD'} {destination.startingPrice?.toLocaleString() || '999'}
               </p>
             </div>
             <button className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-md">
