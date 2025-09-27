@@ -3,8 +3,13 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://woek.onrender.c
 
 // Helper function to ensure proper URL construction
 const buildUrl = (endpoint: string) => {
+  // Remove trailing slash from base URL
   const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+  
+  // Ensure endpoint starts with a single slash
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  
+  // Construct final URL
   const finalUrl = `${baseUrl}${cleanEndpoint}`;
   
   // Debug logging

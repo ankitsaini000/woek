@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { API_CONFIG } from "@/config/api";
+import { API_CONFIG, getApiUrl } from "@/config/api";
 
 interface User {
   id: string;
@@ -76,8 +76,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      console.log("Attempting sign in to:", `${API_BASE_URL}/auth/signin`);
-      const response = await fetch(`${API_BASE_URL}/auth/signin`, {
+      const signInUrl = getApiUrl(API_CONFIG.ENDPOINTS.AUTH.SIGNIN);
+      console.log("Attempting sign in to:", signInUrl);
+      const response = await fetch(signInUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,8 +104,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (data: SignUpData) => {
     try {
-      console.log("Attempting sign up to:", `${API_BASE_URL}/auth/signup`);
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      const signUpUrl = getApiUrl(API_CONFIG.ENDPOINTS.AUTH.SIGNUP);
+      console.log("Attempting sign up to:", signUpUrl);
+      const response = await fetch(signUpUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
