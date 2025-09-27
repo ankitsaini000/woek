@@ -1,0 +1,37 @@
+{
+  "name": "tour-travel-project",
+  "version": "1.0.0",
+  "description": "Tour and Travel Project - Full Stack Application",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:admin && npm run build:frontend",
+    "build:admin": "cd admin && npm install && npm run build",
+    "build:backend": "cd backend && npm install && npm run build",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "start": "npm run start:backend",
+    "start:admin": "cd admin && npm run start",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run start",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:admin\" \"npm run dev:frontend\"",
+    "dev:admin": "cd admin && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd admin && npm install && cd ../backend && npm install && cd ../frontend && npm install"
+  },
+  "keywords": [
+    "tour",
+    "travel",
+    "nextjs",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
