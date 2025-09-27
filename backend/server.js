@@ -27,6 +27,33 @@ const allowedOrigins = [
   'https://woek-admin.vercel.app' // Alternative admin URL
 ];
 
+// Use cors package for additional CORS handling
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Allow all Vercel deployments in production
+    if (process.env.NODE_ENV === 'production' && origin && (
+      origin.includes('vercel.app') || 
+      origin.includes('woek') ||
+      origin.includes('admin-woek')
+    )) {
+      return callback(null, true);
+    }
+    
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
+}));
+
+// Enhanced CORS middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   
@@ -35,9 +62,15 @@ app.use((req, res, next) => {
   console.log('Request URL:', req.url);
   console.log('Request method:', req.method);
   
+  // Always set CORS headers first
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
   // Allow requests from allowed origins
   if (allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+    console.log('Origin allowed:', origin);
   } else if (process.env.NODE_ENV === 'production' && origin && (
     origin.includes('vercel.app') || 
     origin.includes('woek') ||
@@ -45,16 +78,15 @@ app.use((req, res, next) => {
   )) {
     // Allow all Vercel deployments and woek domains in production
     res.header('Access-Control-Allow-Origin', origin);
+    console.log('Production origin allowed:', origin);
+  } else if (origin) {
+    console.log('Origin not allowed:', origin);
   }
-  
-  // Set CORS headers
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
   
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    console.log('Handling preflight request for:', req.url);
+    return res.status(200).end();
   }
   
   next();
