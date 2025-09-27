@@ -165,7 +165,7 @@ export function EditDestinationModal({ isOpen, onClose, onSuccess, destination }
       
       console.log('Updating destination data:', sanitizedData);
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/destinations/${destination._id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/destinations/${destination._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

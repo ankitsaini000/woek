@@ -66,6 +66,16 @@ router.post('/signup', async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error);
+    
+    // Handle validation errors specifically
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ 
+        message: 'Validation failed', 
+        errors: validationErrors 
+      });
+    }
+    
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -117,6 +127,16 @@ router.post('/signin', async (req, res) => {
     });
   } catch (error) {
     console.error('Signin error:', error);
+    
+    // Handle validation errors specifically
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ 
+        message: 'Validation failed', 
+        errors: validationErrors 
+      });
+    }
+    
     res.status(500).json({ message: 'Internal server error' });
   }
 });

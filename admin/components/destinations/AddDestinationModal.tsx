@@ -138,7 +138,7 @@ export function AddDestinationModal({ isOpen, onClose, onSuccess }: AddDestinati
       console.log('Sending destination data:', sanitizedData);
       console.log('Auth token:', token ? 'Present' : 'Missing');
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/destinations`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/destinations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

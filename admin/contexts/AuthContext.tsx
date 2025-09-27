@@ -50,7 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const token = localStorage.getItem("authToken");
         if (token) {
-          const response = await fetch(`${API_BASE_URL}/auth/me`, {
+          const meUrl = getApiUrl(API_CONFIG.ENDPOINTS.AUTH.ME);
+          const response = await fetch(meUrl, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
