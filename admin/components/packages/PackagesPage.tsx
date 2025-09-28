@@ -294,7 +294,7 @@ export function PackagesPage() {
 
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <span className="text-lg font-bold text-green-600">
+                          <span className="text-lg font-bold text-blue-600">
                             {pkg.currency} {pkg.currentPrice.toLocaleString()}
                           </span>
                           <span className="text-sm text-gray-500 line-through">

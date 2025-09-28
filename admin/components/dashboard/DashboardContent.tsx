@@ -77,7 +77,7 @@ export function DashboardContent() {
                 <p className="text-sm font-medium text-gray-500">{stat.name}</p>
                 <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
                 <p className={`text-sm ${
-                  stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
+                  stat.changeType === 'positive' ? 'text-blue-600' : 'text-red-600'
                 }`}>
                   {stat.change} from last month
                 </p>
@@ -125,7 +125,7 @@ export function DashboardContent() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                       booking.status === 'Confirmed' 
-                        ? 'bg-green-100 text-green-800' 
+                        ? 'bg-blue-100 text-blue-800' 
                         : 'bg-yellow-100 text-yellow-800'
                     }`}>
                       {booking.status}

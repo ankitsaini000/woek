@@ -302,7 +302,7 @@ export default function PackageDetailClient({ packageData }: { packageData: Pack
                           <div className="text-sm text-black space-y-2">
                             {packageData.detailedTermsAndConditions.booking.map((term, index) => (
                               <p key={index} className="flex items-start">
-                                <span className="inline-block w-2 h-2 bg-green-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                                <span className="inline-block w-2 h-2 bg-blue-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
                                 {term}
                               </p>
                             ))}
@@ -403,7 +403,7 @@ export default function PackageDetailClient({ packageData }: { packageData: Pack
                     <span className="text-sm text-gray-500 line-through">{packageData.currency} {packageData.originalPrice.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center mb-4">
-                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">{packageData.discount}% OFF</span>
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">{packageData.discount}% OFF</span>
                     <span className="text-xs text-gray-500 ml-2">per person</span>
                   </div>
                   <div className="text-sm text-gray-600 mb-4">
@@ -437,7 +437,7 @@ export default function PackageDetailClient({ packageData }: { packageData: Pack
                   <ul className="text-sm text-black space-y-1">
                     {packageData.inclusions.map((item, index) => (
                       <li key={index} className="flex items-center">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-4 h-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                         {item}

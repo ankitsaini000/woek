@@ -6,7 +6,7 @@ export default function About() {
       <div className="container mx-auto px-6">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">About TravelEase</h1>
+          <h1 className="text-4xl font-bold mb-4">About Routrs Ready</h1>
           <p className="text-gray-600 max-w-3xl mx-auto">We&apos;re passionate about creating unforgettable travel experiences that connect people with the world&apos;s most amazing destinations.</p>
         </div>
 

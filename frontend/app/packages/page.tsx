@@ -301,54 +301,94 @@ export default function PackagesPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredPackages.map((pkg) => (
-                  <div key={pkg._id} className="bg-gray-800 rounded-lg shadow-md border border-gray-700 overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    <Link href={`/packages/${pkg._id}`}>
-                      <div className="relative h-48">
-                        <Image
-                          src={pkg.mainImage}
-                          alt={pkg.title}
-                          fill
-                          style={{ objectFit: "cover" }}
-                        />
-                        <div className="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 m-2 rounded-full text-xs font-medium">
-                          {pkg.duration}
-                        </div>
-                        {pkg.featured && (
-                          <div className="absolute top-0 left-0 bg-yellow-500 text-black px-3 py-1 m-2 rounded-full text-xs font-medium">
-                            Featured
+              <div className="relative">
+                {/* Navigation Buttons */}
+                <div className="absolute top-0 right-0 z-10 flex space-x-2 mb-4">
+                  <button 
+                    onClick={() => {
+                      const container = document.getElementById('packages-page-slider');
+                      if (container) {
+                        container.scrollBy({ left: -400, behavior: 'smooth' });
+                      }
+                    }}
+                    className="bg-gray-700/90 hover:bg-gray-600 shadow-md rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-all"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                  </button>
+                  
+                  <button 
+                    onClick={() => {
+                      const container = document.getElementById('packages-page-slider');
+                      if (container) {
+                        container.scrollBy({ left: 400, behavior: 'smooth' });
+                      }
+                    }}
+                    className="bg-gray-700/90 hover:bg-gray-600 shadow-md rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-all"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Packages Slider - Always show 3 cards */}
+                <div 
+                  id="packages-page-slider"
+                  className="flex gap-6 overflow-x-auto scrollbar-hide pb-4"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {filteredPackages.map((pkg) => (
+                    <div key={pkg._id} className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3">
+                      <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
+                        <Link href={`/packages/${pkg._id}`}>
+                          <div className="relative h-48">
+                            <Image
+                              src={pkg.mainImage}
+                              alt={pkg.title}
+                              fill
+                              style={{ objectFit: "cover" }}
+                            />
+                            <div className="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 m-2 rounded-full text-xs font-medium">
+                              {pkg.duration}
+                            </div>
+                            {pkg.featured && (
+                              <div className="absolute top-0 left-0 bg-yellow-500 text-black px-3 py-1 m-2 rounded-full text-xs font-medium">
+                                Featured
+                              </div>
+                            )}
                           </div>
-                        )}
+                          <div className="p-4">
+                            <h3 className="text-lg font-bold text-white mb-1 line-clamp-1">{pkg.title}</h3>
+                            <p className="text-gray-300 text-sm mb-2">{pkg.location}</p>
+                            <p className="text-gray-400 text-xs mb-3 line-clamp-2">{pkg.subtitle}</p>
+                            <div className="flex items-center mb-3">
+                              <div className="flex mr-2">
+                                {[...Array(5)].map((_, i) => (
+                                  <svg key={i} className={`w-4 h-4 ${i < 4 ? "text-yellow-400" : "text-gray-600"}`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                  </svg>
+                                ))}
+                              </div>
+                              <span className="text-xs text-gray-400">4.0 (24 reviews)</span>
+                            </div>
+                            <div className="flex justify-between items-end">
+                              <div>
+                                <p className="text-xs text-gray-500 line-through">{pkg.currency} {pkg.originalPrice.toLocaleString()}</p>
+                                <p className="text-lg font-bold text-blue-400">{pkg.currency} {pkg.currentPrice.toLocaleString()}</p>
+                                <p className="text-xs text-blue-400">Save {pkg.discount}%</p>
+                              </div>
+                              <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-1 px-3 rounded transition-colors duration-300">
+                                View Details
+                              </button>
+                            </div>
+                          </div>
+                        </Link>
                       </div>
-                      <div className="p-4">
-                        <h3 className="text-lg font-bold text-white mb-1 line-clamp-1">{pkg.title}</h3>
-                        <p className="text-gray-300 text-sm mb-2">{pkg.location}</p>
-                        <p className="text-gray-400 text-xs mb-3 line-clamp-2">{pkg.subtitle}</p>
-                        <div className="flex items-center mb-3">
-                          <div className="flex mr-2">
-                            {[...Array(5)].map((_, i) => (
-                              <svg key={i} className={`w-4 h-4 ${i < 4 ? "text-yellow-400" : "text-gray-600"}`} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                              </svg>
-                            ))}
-                          </div>
-                          <span className="text-xs text-gray-400">4.0 (24 reviews)</span>
-                        </div>
-                        <div className="flex justify-between items-end">
-                          <div>
-                            <p className="text-xs text-gray-500 line-through">{pkg.currency} {pkg.originalPrice.toLocaleString()}</p>
-                            <p className="text-lg font-bold text-blue-400">{pkg.currency} {pkg.currentPrice.toLocaleString()}</p>
-                            <p className="text-xs text-green-400">Save {pkg.discount}%</p>
-                          </div>
-                          <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-1 px-3 rounded transition-colors duration-300">
-                            View Details
-                          </button>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             

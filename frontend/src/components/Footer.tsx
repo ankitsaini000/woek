@@ -25,8 +25,8 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-300">
-              <li>123 Travel Street</li>
-              <li>Adventure City, AC 12345</li>
+              {/* <li>123 Travel Street</li> */}
+              <li>Vaishali nager jaipur</li>
               <li>Phone: (123) 456-7890</li>
               <li>Email: info@travelease.com</li>
             </ul>

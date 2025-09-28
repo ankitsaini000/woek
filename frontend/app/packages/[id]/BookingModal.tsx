@@ -142,7 +142,7 @@ export default function BookingModal({ isOpen, onClose, packageData }: BookingMo
           {bookingReference ? (
             // Success Message
             <div className="text-center py-8">
-              <div className="text-green-500 text-6xl mb-4">✓</div>
+              <div className="text-blue-500 text-6xl mb-4">✓</div>
               <h3 className="text-xl font-semibold text-black mb-2">Booking Confirmed!</h3>
               <p className="text-black mb-4">Your booking has been created successfully.</p>
               <p className="text-black font-semibold">Booking Reference: {bookingReference}</p>
@@ -363,7 +363,7 @@ export default function BookingModal({ isOpen, onClose, packageData }: BookingMo
               {submitMessage && (
                 <div className={`mt-4 p-3 rounded-md ${
                   submitMessage.includes('successfully') 
-                    ? 'bg-green-100 text-green-700' 
+                    ? 'bg-blue-100 text-blue-700' 
                     : 'bg-red-100 text-red-700'
                 }`}>
                   {submitMessage}

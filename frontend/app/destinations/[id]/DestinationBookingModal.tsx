@@ -171,7 +171,7 @@ export default function DestinationBookingModal({ isOpen, onClose, destinationId
           </div>
 
           {bookingReference ? (
-            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-6">
               <h3 className="font-bold">Booking Confirmed!</h3>
               <p>Your booking reference is: <strong>{bookingReference}</strong></p>
               <p className="text-sm mt-2">We will contact you soon with more details.</p>
@@ -393,7 +393,7 @@ export default function DestinationBookingModal({ isOpen, onClose, destinationId
               {submitMessage && (
                 <div className={`mt-4 p-3 rounded-md ${
                   submitMessage.includes('successfully') 
-                    ? 'bg-green-100 text-green-700' 
+                    ? 'bg-blue-100 text-blue-700' 
                     : 'bg-red-100 text-red-700'
                 }`}>
                   {submitMessage}

@@ -72,10 +72,10 @@ const TourCard = ({
         
         {/* Activities */}
         <div className="mb-4">
-          <ul className="text-green-600 text-sm">
+          <ul className="text-blue-600 text-sm">
             {activities.map((activity, index) => (
               <li key={index} className="flex items-center mb-1">
-                <svg className="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4 h-4 mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                 </svg>
                 {activity}
@@ -97,7 +97,7 @@ const TourCard = ({
             </div>
             <Link 
               href={id ? `/packages/${id}` : (link || '/packages')}
-              className="bg-green-500 hover:bg-green-600 text-white text-xs font-medium py-2 px-4 rounded transition-colors duration-300"
+              className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-2 px-4 rounded transition-colors duration-300"
             >
               View Details
             </Link>

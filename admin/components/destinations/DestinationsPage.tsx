@@ -206,7 +206,7 @@ export function DestinationsPage() {
                           }}
                         />
                         <div className="absolute top-2 right-2">
-                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                             Active
                           </span>
                         </div>

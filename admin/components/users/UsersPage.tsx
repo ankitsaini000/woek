@@ -232,7 +232,7 @@ export function UsersPage() {
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                               user.role === 'admin' 
                                 ? 'bg-red-100 text-red-800' 
-                                : 'bg-green-100 text-green-800'
+                                : 'bg-blue-100 text-blue-800'
                             }`}>
                               <Shield className="h-3 w-3 mr-1" />
                               {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'User'}
@@ -294,7 +294,7 @@ export function UsersPage() {
               </div>
               <div className="bg-white p-4 rounded-lg shadow">
                 <div className="flex items-center">
-                  <User className="h-8 w-8 text-green-600" />
+                  <User className="h-8 w-8 text-blue-600" />
                   <div className="ml-3">
                     <p className="text-sm font-medium text-gray-500">Regular Users</p>
                     <p className="text-2xl font-bold text-gray-900">

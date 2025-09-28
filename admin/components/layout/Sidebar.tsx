@@ -11,6 +11,7 @@ import {
   X
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -49,7 +50,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-gray-900">Tour Admin</h1>
+          <div className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="Tour Admin Logo"
+              width={120}
+              height={40}
+              className="h-8 w-auto"
+            />
+          </div>
           <button
             onClick={onClose}
             className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100"

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
@@ -36,7 +37,14 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-green-600">TravelOn</span>
+              <Image
+                src="/logo.png"
+                alt="TravelOn Logo"
+                width={160}
+                height={60}
+                className="h-12 w-auto"
+                priority
+              />
             </Link>
           </div>
           
@@ -46,8 +54,8 @@ const Navbar = () => {
               href="/" 
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 isActive('/') 
-                  ? 'text-green-600 bg-green-50' 
-                  : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
               }`}
             >
               Home
@@ -56,8 +64,8 @@ const Navbar = () => {
               href="/destinations" 
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 isActive('/destinations') 
-                  ? 'text-green-600 bg-green-50' 
-                  : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
               }`}
             >
               Destinations
@@ -66,8 +74,8 @@ const Navbar = () => {
               href="/packages" 
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 isActive('/packages') 
-                  ? 'text-green-600 bg-green-50' 
-                  : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
               }`}
             >
               Packages
@@ -76,8 +84,8 @@ const Navbar = () => {
               href="/about" 
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 isActive('/about') 
-                  ? 'text-green-600 bg-green-50' 
-                  : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
               }`}
             >
               About Us
@@ -86,15 +94,15 @@ const Navbar = () => {
               href="/contact" 
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 isActive('/contact') 
-                  ? 'text-green-600 bg-green-50' 
-                  : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
               }`}
             >
               Contact
             </Link>
             <Link 
               href="/contact" 
-              className="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-green-500 text-white hover:bg-green-600 transition-all duration-200"
+              className="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200"
             >
               Book Now
             </Link>
@@ -104,7 +112,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-green-600 focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 focus:outline-none"
             >
               <svg
                 className={`h-6 w-6 ${isMenuOpen ? "hidden" : "block"}`}
@@ -136,8 +144,8 @@ const Navbar = () => {
             href="/" 
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isActive('/') 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
             }`}
           >
             Home
@@ -146,8 +154,8 @@ const Navbar = () => {
             href="/destinations" 
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isActive('/destinations') 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
             }`}
           >
             Destinations
@@ -156,8 +164,8 @@ const Navbar = () => {
             href="/packages" 
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isActive('/packages') 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
             }`}
           >
             Packages
@@ -166,8 +174,8 @@ const Navbar = () => {
             href="/about" 
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isActive('/about') 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
             }`}
           >
             About Us
@@ -176,15 +184,15 @@ const Navbar = () => {
             href="/contact" 
             className={`block px-3 py-2 rounded-md text-base font-medium ${
               isActive('/contact') 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
+                ? 'text-blue-600 bg-blue-50' 
+                : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
             }`}
           >
             Contact
           </Link>
           <Link 
             href="/contact" 
-            className="block px-3 py-2 rounded-md text-base font-medium bg-green-500 text-white hover:bg-green-600 mt-3"
+            className="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700 mt-3"
           >
             Book Now
           </Link>

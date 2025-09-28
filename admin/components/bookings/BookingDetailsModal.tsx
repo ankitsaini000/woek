@@ -100,7 +100,7 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'confirmed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
       case 'cancelled':
@@ -115,7 +115,7 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
       case 'paid':
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
       case 'failed':
@@ -281,11 +281,11 @@ export function BookingDetailsModal({ isOpen, onClose, bookingId }: BookingDetai
                     <DollarSign className="h-5 w-5 mr-2" />
                     Financial Information
                   </h3>
-                  <div className="bg-green-50 rounded-lg p-4">
+                  <div className="bg-blue-50 rounded-lg p-4">
                     <div className="flex justify-between items-center">
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Total Amount</label>
-                        <p className="text-2xl font-bold text-green-600">{formatCurrency(booking.totalAmount, booking.packageId?.currency || 'USD')}</p>
+                        <p className="text-2xl font-bold text-blue-600">{formatCurrency(booking.totalAmount, booking.packageId?.currency || 'USD')}</p>
                       </div>
                       <div className="text-right">
                         <label className="block text-sm font-medium text-gray-700">Payment Status</label>

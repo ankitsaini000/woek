@@ -191,7 +191,7 @@ export function BookingsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "confirmed":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
+        return <CheckCircle className="h-4 w-4 text-blue-600" />;
       case "pending":
         return <div className="h-4 w-4 rounded-full bg-yellow-400"></div>;
       case "cancelled":
@@ -206,7 +206,7 @@ export function BookingsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmed":
-        return "bg-green-100 text-green-800";
+        return "bg-blue-100 text-blue-800";
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       case "cancelled":
@@ -221,7 +221,7 @@ export function BookingsPage() {
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
       case "paid":
-        return "bg-green-100 text-green-800";
+        return "bg-blue-100 text-blue-800";
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       case "failed":
